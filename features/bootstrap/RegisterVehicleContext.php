@@ -9,9 +9,8 @@ use Fulll\Domain\Exception\VehicleAlreadyRegisteredInFleetException;
 
 class RegisterVehicleContext implements Context
 {
-    
-
-    private Fleet $fleet;
+    private Fleet $myFleet;
+    private Fleet $anotherUserFleet;
     private Vehicle $vehicle;
     private ?Exception $exception = null;
 
@@ -20,7 +19,7 @@ class RegisterVehicleContext implements Context
      */
     public function createFleet(): void
     {
-        $this->fleet = new Fleet();
+        $this->myFleet = new Fleet('my-fleet');
     }
 
     /**
@@ -35,9 +34,9 @@ class RegisterVehicleContext implements Context
      * @When I register this vehicle into my fleet
      * @Given I have registered this vehicle into my fleet
      */
-    public function registerVehicle(): void
+    public function registerVehicleIntoMyFleet(): void
     {
-        $this->fleet->registerVehicle($this->vehicle);
+        $this->myFleet->registerVehicle($this->vehicle);
     }
 
     /**
@@ -45,11 +44,7 @@ class RegisterVehicleContext implements Context
      */
     public function assertVehicleInFleet(): void
     {
-        $fleetVehicles = $this->fleet->getVehicles();
-        $fleetVehicleIds = array_map(fn ($vehicle) => $vehicle->getId(), $fleetVehicles);
-        $vehicleId = $this->vehicle->getId();
-
-        assert(in_array($vehicleId, $fleetVehicleIds), 'Vehicle is not part of the fleet');
+        assert($this->myFleet->hasVehicle($this->vehicle), 'Vehicle is not part of the fleet');
     }
 
     /**
@@ -58,9 +53,8 @@ class RegisterVehicleContext implements Context
     public function attemptToRegisterVehicle(): void
     {
         try {
-            $this->fleet->registerVehicle($this->vehicle);
-        }
-        catch(Exception $exception) {
+            $this->myFleet->registerVehicle($this->vehicle);
+        } catch (Exception $exception) {
             $this->exception = $exception;
         }
     }
@@ -74,5 +68,21 @@ class RegisterVehicleContext implements Context
         $exceptionMessage = $this->exception?->getMessage();
 
         assert($expectedMessage === $exceptionMessage, 'Expected exception message not found');
+    }
+
+    /**
+     * @Given the fleet of another user
+     */
+    public function createAnotherUserFleet()
+    {
+        $this->anotherUserFleet = new Fleet('another-user-fleet');
+    }
+
+    /**
+     * @Given This vehicle has been registered into the other user's fleet
+     */
+    public function registerVehicleIntoAnotherUserFleet(): void
+    {
+        $this->anotherUserFleet->registerVehicle($this->vehicle);
     }
 }

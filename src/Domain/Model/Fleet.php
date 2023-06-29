@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Fulll\Domain\Model;
 
@@ -6,11 +6,10 @@ use Fulll\Domain\Exception\VehicleAlreadyRegisteredInFleetException;
 
 class Fleet
 {
-    private array $vehicles;
-
-    public function __construct()
-    {
-        $this->vehicles = [];
+    public function __construct(
+        private string $userId,
+        private array $vehicles = []
+    ) {
     }
 
     public function registerVehicle(Vehicle $vehicle): void
