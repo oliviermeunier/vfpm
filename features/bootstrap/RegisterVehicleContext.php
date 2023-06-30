@@ -3,41 +3,17 @@
 declare(strict_types=1);
 
 use Fulll\Domain\Model\Fleet;
-use Fulll\Domain\Model\Vehicle;
 use Behat\Behat\Context\Context;
 use Fulll\Domain\Exception\VehicleAlreadyRegisteredInFleetException;
 
 class RegisterVehicleContext implements Context
 {
-    private Fleet $myFleet;
+
+    use VehicleInMyFleetTrait;
+    
     private Fleet $anotherUserFleet;
-    private Vehicle $vehicle;
     private ?Exception $exception = null;
 
-    /**
-     * @Given my fleet
-     */
-    public function createFleet(): void
-    {
-        $this->myFleet = new Fleet('my-fleet');
-    }
-
-    /**
-     * @Given a vehicle
-     */
-    public function createVehicle(): void
-    {
-        $this->vehicle = new Vehicle('vehicle-1');
-    }
-
-    /**
-     * @When I register this vehicle into my fleet
-     * @Given I have registered this vehicle into my fleet
-     */
-    public function registerVehicleIntoMyFleet(): void
-    {
-        $this->myFleet->registerVehicle($this->vehicle);
-    }
 
     /**
      * @Then this vehicle should be part of my vehicle fleet
@@ -54,7 +30,7 @@ class RegisterVehicleContext implements Context
     {
         try {
             $this->myFleet->registerVehicle($this->vehicle);
-        } catch (Exception $exception) {
+        } catch (VehicleAlreadyRegisteredInFleetException $exception) {
             $this->exception = $exception;
         }
     }

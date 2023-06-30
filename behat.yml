@@ -1,5 +1,5 @@
 default:
   suites:
-    default:
+    web:
       contexts:
-        - RegisterVehicleContext
+        - ParkVehicleContext
