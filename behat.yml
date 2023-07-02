@@ -2,4 +2,6 @@ default:
   suites:
     web:
       contexts:
+        - BackgroundContext
+        - RegisterVehicleContext
         - ParkVehicleContext

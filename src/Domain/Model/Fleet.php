@@ -7,9 +7,15 @@ use Fulll\Domain\Exception\VehicleAlreadyRegisteredInFleetException;
 class Fleet
 {
     public function __construct(
+        private string $id,
         private string $userId,
         private array $vehicles = []
     ) {
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function registerVehicle(Vehicle $vehicle): void

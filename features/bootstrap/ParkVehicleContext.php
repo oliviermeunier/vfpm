@@ -4,21 +4,31 @@ declare(strict_types=1);
 
 use Behat\Behat\Context\Context;
 use Fulll\Domain\Model\Location;
+use Fulll\Domain\Interface\FleetRepositoryInterface;
+use Fulll\Domain\Interface\VehicleRepositoryInterface;
+use Fulll\Infrastructure\Repository\InMemoryFleetRepository;
+use Fulll\Infrastructure\Repository\InMemoryVehicleRepository;
 use Fulll\Domain\Exception\VehicleAlreadyParkedAtLocationException;
 
 class ParkVehicleContext implements Context
 {
-    use VehicleInMyFleetTrait;
-
+    private FleetRepositoryInterface $fleetRepository;
+    private VehicleRepositoryInterface $vehicleRepository;
     private Location $location;
     private ?Exception $exception = null;
+
+    public function __construct()
+    {
+        $this->fleetRepository = new InMemoryFleetRepository();
+        $this->vehicleRepository = new InMemoryVehicleRepository();
+    }
 
     /**
      * @Given a location
      */
     public function createLocation(): void
     {
-        $this->location = new Location(43,5);
+        $this->location = new Location(43, 5);
     }
 
     /**
@@ -27,7 +37,8 @@ class ParkVehicleContext implements Context
      */
     public function parkVehicleAtLocation(): void
     {
-        $this->vehicle->park($this->location);
+        $myVehicle = $this->vehicleRepository->find(SampleIdEnum::A_VEHICLE_ID->value);
+        $myVehicle->park($this->location);
     }
 
     /**
@@ -35,19 +46,20 @@ class ParkVehicleContext implements Context
      */
     public function assertKnownLocation(): void
     {
-        $vehicleLocation = $this->vehicle->getLocation();
+        $myVehicle = $this->vehicleRepository->find(SampleIdEnum::A_VEHICLE_ID->value);
+        $vehicleLocation = $myVehicle->getLocation();
         assert($vehicleLocation->equals($this->location), 'Known location does not match the specified location');
     }
 
-   /**
-    * @When I try to park my vehicle at this location
-    */
-    public function tryToParkVehicleAtLocation(): void 
+    /**
+     * @When I try to park my vehicle at this location
+     */
+    public function tryToParkVehicleAtLocation(): void
     {
+        $myVehicle = $this->vehicleRepository->find(SampleIdEnum::A_VEHICLE_ID->value);
         try {
-            $this->vehicle->park($this->location);
-        }
-        catch(VehicleAlreadyParkedAtLocationException $exception) {
+            $myVehicle->park($this->location);
+        } catch (VehicleAlreadyParkedAtLocationException $exception) {
             $this->exception = $exception;
         }
     }
@@ -62,5 +74,4 @@ class ParkVehicleContext implements Context
 
         assert($expectedMessage === $exceptionMessage, 'Expected exception message not found');
     }
-
 }
