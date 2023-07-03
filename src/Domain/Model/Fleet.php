@@ -6,11 +6,18 @@ use Fulll\Domain\Exception\VehicleAlreadyRegisteredInFleetException;
 
 class Fleet
 {
-    public function __construct(
-        private string $id,
-        private string $userId,
-        private array $vehicles = []
-    ) {
+    private string $id;
+    private string $userId;
+    private array $vehicles = [];
+
+    public function __construct(string $userId) {
+        $this->userId = $userId;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getId(): string

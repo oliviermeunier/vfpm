@@ -3,6 +3,7 @@
 namespace Fulll\Infrastructure\Repository;
 
 use Fulll\Domain\Model\Vehicle;
+use Fulll\Domain\Model\PlateNumber;
 use Fulll\Domain\Interface\VehicleRepositoryInterface;
 
 class InMemoryVehicleRepository implements VehicleRepositoryInterface
@@ -14,15 +15,24 @@ class InMemoryVehicleRepository implements VehicleRepositoryInterface
         static::$vehicleCollection = [];
     }
 
-    public function save(Vehicle $vehicle): void
+    public function persist(Vehicle $vehicle): string
     {
+        $counter = count(static::$vehicleCollection) + 1;
+        $vehicle->setId("vehicle-$counter");
+
         static::$vehicleCollection[] = $vehicle;
+
+        return $vehicle->getId();
     }
 
-    public function find(string $id): ?Vehicle
+    public function findByPlateNumber(string|PlateNumber $plateNumber): ?Vehicle
     {
+        if (is_string($plateNumber)) {
+            $plateNumber = new PlateNumber($plateNumber);
+        }
+
         foreach (static::$vehicleCollection as $vehicle) {
-            if ($vehicle->getId() === $id) {
+            if ($vehicle->getPlateNumber()->equals($plateNumber)) {
                 return $vehicle;
             }
         }

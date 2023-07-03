@@ -14,9 +14,14 @@ class InMemoryFleetRepository implements FleetRepositoryInterface
         static::$fleetCollection = [];
     }
 
-    public function save(Fleet $fleet): void
+    public function persist(Fleet $fleet): string
     {
+        $counter = count(static::$fleetCollection) + 1;
+        $fleet->setId("fleet-$counter");
+
         static::$fleetCollection[] = $fleet;
+
+        return $fleet->getId();
     }
 
     public function find(string $id): ?Fleet

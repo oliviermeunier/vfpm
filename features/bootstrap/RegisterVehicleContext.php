@@ -29,7 +29,7 @@ class RegisterVehicleContext implements Context
     public function assertVehicleInFleet(): void
     {
         $myFleet = $this->fleetRepository->find(SampleIdEnum::MY_FLEET_ID->value);
-        $vehicle = $this->vehicleRepository->find(SampleIdEnum::A_VEHICLE_ID->value);
+        $vehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
         assert($myFleet->hasVehicle($vehicle), 'Vehicle is not part of the fleet');
     }
 
@@ -39,7 +39,7 @@ class RegisterVehicleContext implements Context
     public function attemptToRegisterVehicle(): void
     {
         $myFleet = $this->fleetRepository->find(SampleIdEnum::MY_FLEET_ID->value);
-        $vehicle = $this->vehicleRepository->find(SampleIdEnum::A_VEHICLE_ID->value);
+        $vehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
 
         try {
             $myFleet->registerVehicle($vehicle);
@@ -65,10 +65,9 @@ class RegisterVehicleContext implements Context
     public function createAnotherUserFleet()
     {
         $anotherUserFleet = new Fleet(
-            SampleIdEnum::ANOTHER_USER_FLEET_ID->value,
             SampleIdEnum::ANOTHER_USER_ID->value
         );
-        $this->fleetRepository->save($anotherUserFleet);
+        $this->fleetRepository->persist($anotherUserFleet);
     }
 
     /**
@@ -77,7 +76,7 @@ class RegisterVehicleContext implements Context
     public function registerVehicleIntoAnotherUserFleet(): void
     {
         $anotherUserFleet = $this->fleetRepository->find(SampleIdEnum::ANOTHER_USER_FLEET_ID->value);
-        $vehicle = $this->vehicleRepository->find(SampleIdEnum::A_VEHICLE_ID->value);
+        $vehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
         $anotherUserFleet->registerVehicle($vehicle);
     }
 }

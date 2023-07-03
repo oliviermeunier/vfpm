@@ -37,7 +37,7 @@ class ParkVehicleContext implements Context
      */
     public function parkVehicleAtLocation(): void
     {
-        $myVehicle = $this->vehicleRepository->find(SampleIdEnum::A_VEHICLE_ID->value);
+        $myVehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
         $myVehicle->park($this->location);
     }
 
@@ -46,7 +46,7 @@ class ParkVehicleContext implements Context
      */
     public function assertKnownLocation(): void
     {
-        $myVehicle = $this->vehicleRepository->find(SampleIdEnum::A_VEHICLE_ID->value);
+        $myVehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
         $vehicleLocation = $myVehicle->getLocation();
         assert($vehicleLocation->equals($this->location), 'Known location does not match the specified location');
     }
@@ -56,7 +56,7 @@ class ParkVehicleContext implements Context
      */
     public function tryToParkVehicleAtLocation(): void
     {
-        $myVehicle = $this->vehicleRepository->find(SampleIdEnum::A_VEHICLE_ID->value);
+        $myVehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
         try {
             $myVehicle->park($this->location);
         } catch (VehicleAlreadyParkedAtLocationException $exception) {

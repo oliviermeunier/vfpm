@@ -2,10 +2,11 @@
 
 namespace Fulll\Domain\Interface;
 
+use Fulll\Domain\Model\PlateNumber;
 use Fulll\Domain\Model\Vehicle;
 
 interface VehicleRepositoryInterface
 {
-    public function save(Vehicle $vehicle): void;
-    public function find(string $id): ?Vehicle;
+    public function persist(Vehicle $vehicle): string;
+    public function findByPlateNumber(string|PlateNumber $plateNumber): ?Vehicle;
 }

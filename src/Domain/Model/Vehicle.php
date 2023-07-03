@@ -7,11 +7,20 @@ use Fulll\Domain\Model\Location;
 
 class Vehicle
 {
-    public function __construct(
-        private string $id,
-        private ?Location $location = null
-    )
-    {}
+    private string $id;
+    private PlateNumber $plateNumber;
+    private ?Location $location = null;
+
+    public function __construct(string $plateNumberValue)
+    {
+        $this->plateNumber = new PlateNumber($plateNumberValue);;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     public function getId(): string
     {
@@ -23,6 +32,11 @@ class Vehicle
         return $this->location;
     }
 
+    public function getPlateNumber(): PlateNumber
+    {
+        return $this->plateNumber;
+    }
+
     public function park(Location $location): void 
     {
         if ($this->location?->equals($location)) {
@@ -30,6 +44,5 @@ class Vehicle
         }
 
         $this->location = $location;
-
     }
 }
