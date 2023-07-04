@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Fulll\Domain\Model;
 
@@ -7,7 +7,7 @@ use Fulll\Domain\Model\Location;
 
 class Vehicle
 {
-    private string $id;
+    private VehicleId $id;
     private PlateNumber $plateNumber;
     private ?Location $location = null;
 
@@ -16,18 +16,18 @@ class Vehicle
         $this->plateNumber = new PlateNumber($plateNumberValue);;
     }
 
-    public function setId(string $id): self
+    public function setId(VehicleId $id): self
     {
         $this->id = $id;
         return $this;
     }
 
-    public function getId(): string
+    public function getId(): VehicleId
     {
         return $this->id;
     }
 
-    public function getLocation(): ?Location 
+    public function getLocation(): ?Location
     {
         return $this->location;
     }
@@ -37,7 +37,7 @@ class Vehicle
         return $this->plateNumber;
     }
 
-    public function park(Location $location): void 
+    public function park(Location $location): void
     {
         if ($this->location?->equals($location)) {
             throw new VehicleAlreadyParkedAtLocationException();

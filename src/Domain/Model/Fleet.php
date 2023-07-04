@@ -10,7 +10,8 @@ class Fleet
     private string $userId;
     private array $vehicles = [];
 
-    public function __construct(string $userId) {
+    public function __construct(string $userId)
+    {
         $this->userId = $userId;
     }
 

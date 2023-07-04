@@ -5,6 +5,8 @@ namespace Fulll\Infrastructure\Repository;
 use Fulll\Domain\Model\Vehicle;
 use Fulll\Domain\Model\PlateNumber;
 use Fulll\Domain\Interface\VehicleRepositoryInterface;
+use Fulll\Domain\Model\VehicleId;
+use Fulll\Domain\Shared\ValueObject\UuidV4Generator;
 
 class InMemoryVehicleRepository implements VehicleRepositoryInterface
 {
@@ -17,8 +19,7 @@ class InMemoryVehicleRepository implements VehicleRepositoryInterface
 
     public function persist(Vehicle $vehicle): string
     {
-        $counter = count(static::$vehicleCollection) + 1;
-        $vehicle->setId("vehicle-$counter");
+        $vehicle->setId(new VehicleId(UuidV4Generator::generate()));
 
         static::$vehicleCollection[] = $vehicle;
 
