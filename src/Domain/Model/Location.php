@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Fulll\Domain\Model;
 
@@ -6,9 +6,10 @@ class Location
 {
     public function __construct(
         private float $latitude,
-        private float $longitude
-    )
-    {}
+        private float $longitude,
+        private ?float $altitude = null
+    ) {
+    }
 
     public function getLatitude(): float
     {
@@ -20,8 +21,15 @@ class Location
         return $this->longitude;
     }
 
+    public function getAltitude(): ?float
+    {
+        return $this->altitude;
+    }
+
     public function equals(self $location): bool
     {
-        return $this->latitude === $location->latitude && $this->longitude === $location->longitude;
+        return $this->latitude === $location->latitude
+            && $this->longitude === $location->longitude
+            && $this->altitude === $location->altitude;
     }
 }
