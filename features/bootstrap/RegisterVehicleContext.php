@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Fulll\Domain\Model\Fleet;
+use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\Vehicle;
 use Behat\Behat\Context\Context;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
@@ -28,7 +29,7 @@ class RegisterVehicleContext implements Context
      */
     public function assertVehicleInFleet(): void
     {
-        $myFleet = $this->fleetRepository->find(SampleIdEnum::MY_FLEET_ID->value);
+        $myFleet = $this->fleetRepository->find(new FleetId(SampleIdEnum::MY_FLEET_ID->value));
         $vehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
         assert($myFleet->hasVehicle($vehicle), 'Vehicle is not part of the fleet');
     }
@@ -38,7 +39,7 @@ class RegisterVehicleContext implements Context
      */
     public function attemptToRegisterVehicle(): void
     {
-        $myFleet = $this->fleetRepository->find(SampleIdEnum::MY_FLEET_ID->value);
+        $myFleet = $this->fleetRepository->find(new FleetId(SampleIdEnum::MY_FLEET_ID->value));
         $vehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
 
         try {
@@ -64,10 +65,9 @@ class RegisterVehicleContext implements Context
      */
     public function createAnotherUserFleet()
     {
-        $anotherUserFleet = new Fleet(
-            SampleIdEnum::ANOTHER_USER_ID->value
-        );
+        $anotherUserFleet = new Fleet(SampleIdEnum::ANOTHER_USER_ID->value);
         $this->fleetRepository->persist($anotherUserFleet);
+        $anotherUserFleet->setId(new FleetId(SampleIdEnum::ANOTHER_USER_FLEET_ID->value));
     }
 
     /**
@@ -75,7 +75,7 @@ class RegisterVehicleContext implements Context
      */
     public function registerVehicleIntoAnotherUserFleet(): void
     {
-        $anotherUserFleet = $this->fleetRepository->find(SampleIdEnum::ANOTHER_USER_FLEET_ID->value);
+        $anotherUserFleet = $this->fleetRepository->find(new FleetId(SampleIdEnum::ANOTHER_USER_FLEET_ID->value));
         $vehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
         $anotherUserFleet->registerVehicle($vehicle);
     }

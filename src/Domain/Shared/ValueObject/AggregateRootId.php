@@ -26,4 +26,9 @@ abstract class AggregateRootId
     {
         return $this->uuid;
     }
+
+    public function equals(AggregateRootId $id)
+    {
+        return $this->uuid === $id->getValue();
+    }
 }

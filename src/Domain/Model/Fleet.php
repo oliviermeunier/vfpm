@@ -2,11 +2,12 @@
 
 namespace Fulll\Domain\Model;
 
+use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Exception\VehicleAlreadyRegisteredInFleetException;
 
 class Fleet
 {
-    private string $id;
+    private FleetId $id;
     private string $userId;
     private array $vehicles = [];
 
@@ -15,13 +16,13 @@ class Fleet
         $this->userId = $userId;
     }
 
-    public function setId(string $id): self
+    public function setId(FleetId $id): self
     {
         $this->id = $id;
         return $this;
     }
 
-    public function getId(): string
+    public function getId(): FleetId
     {
         return $this->id;
     }

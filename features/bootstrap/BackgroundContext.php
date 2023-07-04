@@ -5,6 +5,7 @@ use Fulll\Domain\Model\Vehicle;
 use Behat\Behat\Context\Context;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
 use Fulll\Domain\Interface\VehicleRepositoryInterface;
+use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\PlateNumber;
 use Fulll\Infrastructure\Repository\InMemoryFleetRepository;
 use Fulll\Infrastructure\Repository\InMemoryVehicleRepository;
@@ -27,6 +28,7 @@ class BackgroundContext implements Context
     {
         $myFleet = new Fleet(SampleIdEnum::MY_USER_ID->value);
         $this->fleetRepository->persist($myFleet);
+        $myFleet->setId(new FleetId(SampleIdEnum::MY_FLEET_ID->value));
     }
 
     /**
@@ -44,7 +46,7 @@ class BackgroundContext implements Context
      */
     public function registerVehicleIntoMyFleet(): void
     {
-        $myFleet = $this->fleetRepository->find(SampleIdEnum::MY_FLEET_ID->value);
+        $myFleet = $this->fleetRepository->find(new FleetId(SampleIdEnum::MY_FLEET_ID->value));
         $vehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
         $myFleet->registerVehicle($vehicle);
     }

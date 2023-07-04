@@ -4,6 +4,8 @@ namespace Fulll\Infrastructure\Repository;
 
 use Fulll\Domain\Model\Fleet;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
+use Fulll\Domain\Model\FleetId;
+use Fulll\Domain\Shared\ValueObject\UuidV4Generator;
 
 class InMemoryFleetRepository implements FleetRepositoryInterface
 {
@@ -16,18 +18,17 @@ class InMemoryFleetRepository implements FleetRepositoryInterface
 
     public function persist(Fleet $fleet): string
     {
-        $counter = count(static::$fleetCollection) + 1;
-        $fleet->setId("fleet-$counter");
+        $fleet->setId(new FleetId(UuidV4Generator::generate()));
 
         static::$fleetCollection[] = $fleet;
 
         return $fleet->getId();
     }
 
-    public function find(string $id): ?Fleet
+    public function find(FleetId $id): ?Fleet
     {
         foreach (static::$fleetCollection as $fleet) {
-            if ($fleet->getId() === $id) {
+            if ($fleet->getId()->equals($id)) {
                 return $fleet;
             }
         }
