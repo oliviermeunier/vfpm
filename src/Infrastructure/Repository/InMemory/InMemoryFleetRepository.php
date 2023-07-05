@@ -1,6 +1,6 @@
 <?php
 
-namespace Fulll\Infrastructure\Repository;
+namespace Fulll\Infrastructure\Repository\InMemory;
 
 use Fulll\Domain\Model\Fleet;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
@@ -16,7 +16,7 @@ class InMemoryFleetRepository implements FleetRepositoryInterface
         static::$fleetCollection = [];
     }
 
-    public function persist(Fleet $fleet): string
+    public function persist(Fleet $fleet): FleetId
     {
         $fleet->setId(new FleetId(UuidV4Generator::generate()));
 

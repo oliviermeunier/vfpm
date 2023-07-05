@@ -7,6 +7,6 @@ use Fulll\Domain\Model\FleetId;
 
 interface FleetRepositoryInterface
 {
-    public function persist(Fleet $fleet): string;
+    public function persist(Fleet $fleet): FleetId;
     public function find(FleetId $id): ?Fleet;
 }

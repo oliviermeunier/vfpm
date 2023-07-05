@@ -6,9 +6,9 @@ use Behat\Behat\Context\Context;
 use Fulll\Domain\Model\Location;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
 use Fulll\Domain\Interface\VehicleRepositoryInterface;
-use Fulll\Infrastructure\Repository\InMemoryFleetRepository;
-use Fulll\Infrastructure\Repository\InMemoryVehicleRepository;
 use Fulll\Domain\Exception\VehicleAlreadyParkedAtLocationException;
+use Fulll\Infrastructure\Repository\InMemory\InMemoryFleetRepository;
+use Fulll\Infrastructure\Repository\InMemory\InMemoryVehicleRepository;
 
 class ParkVehicleContext implements Context
 {

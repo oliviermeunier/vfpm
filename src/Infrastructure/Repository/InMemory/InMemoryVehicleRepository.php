@@ -1,6 +1,6 @@
 <?php
 
-namespace Fulll\Infrastructure\Repository;
+namespace Fulll\Infrastructure\Repository\InMemory;
 
 use Fulll\Domain\Model\Vehicle;
 use Fulll\Domain\Model\PlateNumber;

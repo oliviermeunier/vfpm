@@ -1,14 +1,14 @@
 <?php
 
 use Fulll\Domain\Model\Fleet;
+use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\Vehicle;
 use Behat\Behat\Context\Context;
+use Fulll\Domain\Model\PlateNumber;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
 use Fulll\Domain\Interface\VehicleRepositoryInterface;
-use Fulll\Domain\Model\FleetId;
-use Fulll\Domain\Model\PlateNumber;
-use Fulll\Infrastructure\Repository\InMemoryFleetRepository;
-use Fulll\Infrastructure\Repository\InMemoryVehicleRepository;
+use Fulll\Infrastructure\Repository\InMemory\InMemoryFleetRepository;
+use Fulll\Infrastructure\Repository\InMemory\InMemoryVehicleRepository;
 
 class BackgroundContext implements Context
 {
