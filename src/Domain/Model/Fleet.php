@@ -27,6 +27,11 @@ class Fleet
         return $this->id;
     }
 
+    public function getUserId(): string
+    {
+        return $this->userId;
+    }
+
     public function registerVehicle(Vehicle $vehicle): void
     {
         if ($this->hasVehicle($vehicle)) {

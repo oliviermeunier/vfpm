@@ -2,13 +2,14 @@
 
 namespace Fulll\Infrastructure\Command;
 
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Fulll\Infrastructure\Repository\PDO\PDOFleetRepository;
 use Fulll\Application\COmmand\CreateFleet\CreateFleetCommand;
 use Fulll\Application\COmmand\CreateFleet\CreateFleetCommandHandler;
 use Fulll\Infrastructure\Repository\InMemory\InMemoryFleetRepository;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 
 class CreateFleetSymfonyCommand extends Command
 {
@@ -24,7 +25,7 @@ class CreateFleetSymfonyCommand extends Command
     {
         $userId = $input->getArgument('user-id');
         $command = new CreateFleetCommand($userId);
-        $handler = new CreateFleetCommandHandler(new InMemoryFleetRepository());
+        $handler = new CreateFleetCommandHandler(new PDOFleetRepository());
         $fleetId = $handler($command);
 
         $output->writeln(sprintf('Fleet created successfully with ID %s', $fleetId));

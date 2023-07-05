@@ -4,7 +4,8 @@
     "require": {
         "behat/behat": "*",
         "symfony/var-dumper": "^6.3",
-        "symfony/console": "^6.3"
+        "symfony/console": "^6.3",
+        "symfony/dotenv": "^6.3"
     },
     "config": {
         "preferred-install": {
