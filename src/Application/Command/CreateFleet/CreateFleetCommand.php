@@ -1,13 +1,15 @@
-<?php 
+<?php
 
-namespace Fulll\Application\COmmand\CreateFleet;
+namespace Fulll\Application\Command\CreateFleet;
 
-class CreateFleetCommand {
-    
+class CreateFleetCommand
+{
+
     public function __construct(private string $userId)
-    {}
+    {
+    }
 
-    public function getUserId(): string 
+    public function getUserId(): string
     {
         return $this->userId;
     }

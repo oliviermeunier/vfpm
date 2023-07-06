@@ -28,7 +28,7 @@ class PDOFleetRepository implements FleetRepositoryInterface
     public function find(FleetId $id): ?Fleet
     {
         $pdo = PDOConnection::getPdo();
-        $sql = 'SELECT * FROM fleet WHERE id = :id)';
+        $sql = 'SELECT * FROM fleet WHERE id = :id';
         $statement = $pdo->prepare($sql);
         $statement->bindValue(':id', $id->getValue());
         $statement->execute();

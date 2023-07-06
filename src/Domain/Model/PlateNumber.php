@@ -1,12 +1,21 @@
-<?php 
+<?php
 
 namespace Fulll\Domain\Model;
 
-class PlateNumber {
+class PlateNumber
+{
 
-    public function __construct(private string $value)
-    {}
-    
+    private string $value;
+
+    public function __construct(string $value)
+    {
+        if (!preg_match('/^[A-Z]{2}-\d{3}-[A-Z]{2}$/', $value)) {
+            throw new \InvalidArgumentException('Not valid plate number');
+        }
+
+        $this->value = $value;
+    }
+
     public function getValue(): string
     {
         return $this->value;

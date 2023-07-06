@@ -5,6 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Console\Application;
 use Fulll\Infrastructure\Command\CreateFleetSymfonyCommand;
+use Fulll\Infrastructure\Command\RegisterVehicleSymfonyCommand;
 
 $dotenv = new Dotenv();
 $dotenv->loadEnv(__DIR__ . '/../.env.local');
@@ -12,5 +13,6 @@ $dotenv->loadEnv(__DIR__ . '/../.env.local');
 $application = new Application();
 
 $application->add(new CreateFleetSymfonyCommand());
+$application->add(new RegisterVehicleSymfonyCommand());
 
 $application->run();

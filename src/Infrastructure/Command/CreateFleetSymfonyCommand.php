@@ -16,7 +16,7 @@ class CreateFleetSymfonyCommand extends Command
     protected function configure()
     {
         $this->setName('create')
-            ->setDescription('Cretae a brand new fleet')
+            ->setDescription('Create a brand new fleet')
             ->setHelp('php bin/fleet create <user-id>')
             ->addArgument('user-id', InputArgument::REQUIRED, 'User Id');
     }

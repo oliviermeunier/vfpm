@@ -4,7 +4,6 @@ use Fulll\Domain\Model\Fleet;
 use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\Vehicle;
 use Behat\Behat\Context\Context;
-use Fulll\Domain\Model\PlateNumber;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
 use Fulll\Domain\Interface\VehicleRepositoryInterface;
 use Fulll\Infrastructure\Repository\InMemory\InMemoryFleetRepository;

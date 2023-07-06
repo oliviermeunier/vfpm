@@ -6,5 +6,5 @@ enum SampleIdEnum: string
     case ANOTHER_USER_FLEET_ID = '0836659a-6605-4163-a460-3ec5f9db6754';
     case MY_USER_ID = 'my_user_id';
     case ANOTHER_USER_ID = 'another_user_id';
-    case A_VEHICLE_PLATE_NUMBER = 'plate-number-1';
+    case A_VEHICLE_PLATE_NUMBER = 'AB-123-CD';
 }
