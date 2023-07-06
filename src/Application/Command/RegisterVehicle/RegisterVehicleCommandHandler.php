@@ -2,6 +2,7 @@
 
 namespace Fulll\Application\Command\RegisterVehicle;
 
+use Exception;
 use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\Vehicle;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
@@ -21,6 +22,10 @@ class RegisterVehicleCommandHandler
         $fleetId = new FleetId($command->getFleetId());
         $fleet = $this->fleetRepository->find($fleetId);
 
+        if (!$fleet) {
+            throw new Exception('Fleet does not exist');
+        }
+
         $plateNumber = $command->getVehiclePlateNumber();
         $vehicle = $this->vehicleRepository->findByPlateNumber($plateNumber);
 
@@ -29,6 +34,8 @@ class RegisterVehicleCommandHandler
             $this->vehicleRepository->persist($vehicle);
         }
 
+        // @TODO is this the best way to do ?
         $fleet->registerVehicle($vehicle);
+        $this->fleetRepository->registerVehicle($fleet, $vehicle);
     }
 }

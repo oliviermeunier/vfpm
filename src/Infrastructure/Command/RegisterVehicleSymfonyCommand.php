@@ -2,6 +2,7 @@
 
 namespace Fulll\Infrastructure\Command;
 
+use Exception;
 use InvalidArgumentException;
 use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\PlateNumber;
@@ -42,7 +43,7 @@ class RegisterVehicleSymfonyCommand extends Command
 
             $output->writeln(sprintf('Vehicle registered successfully into fleet'));
             return Command::SUCCESS;
-        } catch (InvalidArgumentException $exception) {
+        } catch (Exception $exception) {
             $output->writeln('<error>' . $exception->getMessage() . '</error>');
             return Command::FAILURE;
         }

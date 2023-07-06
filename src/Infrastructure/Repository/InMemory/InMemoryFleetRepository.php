@@ -3,8 +3,9 @@
 namespace Fulll\Infrastructure\Repository\InMemory;
 
 use Fulll\Domain\Model\Fleet;
-use Fulll\Domain\Interface\FleetRepositoryInterface;
 use Fulll\Domain\Model\FleetId;
+use Fulll\Domain\Model\Vehicle;
+use Fulll\Domain\Interface\FleetRepositoryInterface;
 use Fulll\Domain\Shared\ValueObject\UuidV4Generator;
 
 class InMemoryFleetRepository implements FleetRepositoryInterface
@@ -33,5 +34,9 @@ class InMemoryFleetRepository implements FleetRepositoryInterface
             }
         }
         return null;
+    }
+
+    public function registerVehicle(Fleet $fleet, Vehicle $vehicle): void
+    {
     }
 }
