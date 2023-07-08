@@ -6,8 +6,13 @@ use Fulll\Domain\Model\Fleet;
 use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\Vehicle;
 use Behat\Behat\Context\Context;
+use Symfony\Component\Dotenv\Dotenv;
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
 use Fulll\Domain\Interface\VehicleRepositoryInterface;
+use Fulll\Infrastructure\Repository\PDO\PDOFleetRepository;
+use Fulll\Infrastructure\Repository\PDO\PDOVehicleRepository;
 use Fulll\Domain\Exception\VehicleAlreadyRegisteredInFleetException;
 use Fulll\Infrastructure\Repository\InMemory\InMemoryFleetRepository;
 use Fulll\Infrastructure\Repository\InMemory\InMemoryVehicleRepository;
@@ -18,10 +23,29 @@ class RegisterVehicleContext implements Context
     private VehicleRepositoryInterface $vehicleRepository;
     private ?Exception $exception = null;
 
-    public function __construct()
+    /** 
+     * @BeforeScenario 
+     */
+    public function before(BeforeScenarioScope $scope)
     {
-        $this->fleetRepository = new InMemoryFleetRepository();
-        $this->vehicleRepository = new InMemoryVehicleRepository();
+        if (in_array('critical', $scope->getScenario()->getTags())) {
+            $this->fleetRepository = new PDOFleetRepository();
+            $this->vehicleRepository = new PDOVehicleRepository();
+        } else {
+            $this->fleetRepository = new InMemoryFleetRepository();
+            $this->vehicleRepository = new InMemoryVehicleRepository();
+        }
+    }
+
+    /** 
+     * @AfterScenario 
+     */
+    public function after(AfterScenarioScope $scope)
+    {
+        if (in_array('critical', $scope->getScenario()->getTags())) {
+            $this->fleetRepository->empty();
+            $this->vehicleRepository->empty();
+        }
     }
 
     /**
@@ -29,8 +53,9 @@ class RegisterVehicleContext implements Context
      */
     public function assertVehicleInFleet(): void
     {
-        $myFleet = $this->fleetRepository->find(new FleetId(SampleIdEnum::MY_FLEET_ID->value));
+        $myFleet = $this->fleetRepository->findByUserId(SampleIdEnum::MY_USER_ID->value);
         $vehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
+
         assert($myFleet->hasVehicle($vehicle), 'Vehicle is not part of the fleet');
     }
 
@@ -39,7 +64,7 @@ class RegisterVehicleContext implements Context
      */
     public function attemptToRegisterVehicle(): void
     {
-        $myFleet = $this->fleetRepository->find(new FleetId(SampleIdEnum::MY_FLEET_ID->value));
+        $myFleet = $this->fleetRepository->findByUserId(SampleIdEnum::MY_USER_ID->value);
         $vehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
 
         try {

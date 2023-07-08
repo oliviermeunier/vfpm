@@ -43,4 +43,9 @@ class InMemoryVehicleRepository implements VehicleRepositoryInterface
     public function updateLocalization(Vehicle $vehicle): void
     {
     }
+
+    public function empty(): void
+    {
+        static::$vehicleCollection = [];
+    }
 }

@@ -49,7 +49,7 @@ class Fleet
     public function hasVehicle(Vehicle $vehicle): bool
     {
         foreach ($this->vehicles as $fleetVehicle) {
-            if ($vehicle->getId() === $fleetVehicle->getId()) {
+            if ($vehicle->getId()->equals($fleetVehicle->getId())) {
                 return true;
             }
         }

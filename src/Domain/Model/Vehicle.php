@@ -32,6 +32,13 @@ class Vehicle
         return $this->location;
     }
 
+    public function setLocation(?float $lat = null, ?float $lng = null, ?float $alt = null): self
+    {
+        $location = new Location($lat, $lng, $alt);
+        $this->location = $location;
+        return $this;
+    }
+
     public function getPlateNumber(): PlateNumber
     {
         return $this->plateNumber;

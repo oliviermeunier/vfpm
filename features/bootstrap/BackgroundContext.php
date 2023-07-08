@@ -4,8 +4,13 @@ use Fulll\Domain\Model\Fleet;
 use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\Vehicle;
 use Behat\Behat\Context\Context;
+use Symfony\Component\Dotenv\Dotenv;
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
 use Fulll\Domain\Interface\VehicleRepositoryInterface;
+use Fulll\Infrastructure\Repository\PDO\PDOFleetRepository;
+use Fulll\Infrastructure\Repository\PDO\PDOVehicleRepository;
 use Fulll\Infrastructure\Repository\InMemory\InMemoryFleetRepository;
 use Fulll\Infrastructure\Repository\InMemory\InMemoryVehicleRepository;
 
@@ -14,10 +19,27 @@ class BackgroundContext implements Context
     private FleetRepositoryInterface $fleetRepository;
     private VehicleRepositoryInterface $vehicleRepository;
 
-    public function __construct()
+    /**
+     * @BeforeSuite
+     */
+    public static function prepare()
     {
-        $this->fleetRepository = new InMemoryFleetRepository();
-        $this->vehicleRepository = new InMemoryVehicleRepository();
+        $dotenv = new Dotenv();
+        $dotenv->loadEnv(__DIR__ . '/../../.env.local');
+    }
+
+    /** 
+     * @BeforeScenario 
+     */
+    public function before(BeforeScenarioScope $scope)
+    {
+        if (in_array('critical', $scope->getScenario()->getTags())) {
+            $this->fleetRepository = new PDOFleetRepository();
+            $this->vehicleRepository = new PDOVehicleRepository();
+        } else {
+            $this->fleetRepository = new InMemoryFleetRepository();
+            $this->vehicleRepository = new InMemoryVehicleRepository();
+        }
     }
 
     /**
@@ -27,7 +49,6 @@ class BackgroundContext implements Context
     {
         $myFleet = new Fleet(SampleIdEnum::MY_USER_ID->value);
         $this->fleetRepository->persist($myFleet);
-        $myFleet->setId(new FleetId(SampleIdEnum::MY_FLEET_ID->value));
     }
 
     /**
@@ -45,8 +66,10 @@ class BackgroundContext implements Context
      */
     public function registerVehicleIntoMyFleet(): void
     {
-        $myFleet = $this->fleetRepository->find(new FleetId(SampleIdEnum::MY_FLEET_ID->value));
+        $myFleet = $this->fleetRepository->findByUserId(SampleIdEnum::MY_USER_ID->value);
         $vehicle = $this->vehicleRepository->findByPlateNumber(SampleIdEnum::A_VEHICLE_PLATE_NUMBER->value);
+
         $myFleet->registerVehicle($vehicle);
+        $this->fleetRepository->registerVehicle($myFleet, $vehicle);
     }
 }

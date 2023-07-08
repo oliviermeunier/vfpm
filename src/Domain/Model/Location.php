@@ -5,8 +5,8 @@ namespace Fulll\Domain\Model;
 class Location
 {
     public function __construct(
-        private float $latitude,
-        private float $longitude,
+        private ?float $latitude = null,
+        private ?float $longitude = null,
         private ?float $altitude = null
     ) {
     }

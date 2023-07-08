@@ -39,4 +39,19 @@ class InMemoryFleetRepository implements FleetRepositoryInterface
     public function registerVehicle(Fleet $fleet, Vehicle $vehicle): void
     {
     }
+
+    public function empty(): void
+    {
+        static::$fleetCollection = [];
+    }
+
+    public function findByUserId(string $userId): ?Fleet
+    {
+        foreach (static::$fleetCollection as $fleet) {
+            if ($fleet->getUserId() === $userId) {
+                return $fleet;
+            }
+        }
+        return null;
+    }
 }

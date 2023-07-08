@@ -11,4 +11,6 @@ interface FleetRepositoryInterface
     public function persist(Fleet $fleet): FleetId;
     public function find(FleetId $id): ?Fleet;
     public function registerVehicle(Fleet $fleet, Vehicle $vehicle): void;
+    public function empty(): void;
+    public function findByUserId(string $userId): ?Fleet;
 }

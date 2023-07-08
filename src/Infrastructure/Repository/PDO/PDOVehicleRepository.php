@@ -6,6 +6,7 @@ use PDO;
 use Fulll\Domain\Model\Fleet;
 use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\Vehicle;
+use Fulll\Domain\Model\Location;
 use Fulll\Domain\Model\VehicleId;
 use Fulll\Domain\Model\PlateNumber;
 use Fulll\Infrastructure\Database\PDOConnection;
@@ -46,10 +47,11 @@ class PDOVehicleRepository implements VehicleRepositoryInterface
             return null;
         }
 
-        $fleet = new Vehicle($vehicleData['plate_number']);
-        $fleet->setId(new VehicleId($vehicleData['id']));
+        $vehicle = new Vehicle($vehicleData['plate_number']);
+        $vehicle->setId(new VehicleId($vehicleData['id']));
+        $vehicle->setLocation($vehicleData['lat'], $vehicleData['lng'], $vehicleData['alt']);
 
-        return $fleet;
+        return $vehicle;
     }
 
     public function updateLocalization(Vehicle $vehicle): void
@@ -63,5 +65,12 @@ class PDOVehicleRepository implements VehicleRepositoryInterface
         $statement->bindValue(':id', $vehicle->getId()->getValue());
 
         $statement->execute();
+    }
+
+    public function empty(): void
+    {
+        $pdo = PDOConnection::getPdo();
+        $sql = 'DELETE FROM vehicle';
+        $pdo->exec($sql);
     }
 }

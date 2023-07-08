@@ -7,6 +7,7 @@ use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\Vehicle;
 use Fulll\Infrastructure\Database\PDOConnection;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
+use Fulll\Domain\Model\VehicleId;
 use Fulll\Domain\Shared\ValueObject\UuidV4Generator;
 
 class PDOFleetRepository implements FleetRepositoryInterface
@@ -54,5 +55,51 @@ class PDOFleetRepository implements FleetRepositoryInterface
         $statement->bindValue(':fleet_id', $fleet->getId()->getValue());
         $statement->bindValue(':vehicle_id', $vehicle->getId()->getValue());
         $statement->execute();
+    }
+
+    public function empty(): void
+    {
+        $pdo = PDOConnection::getPdo();
+        $sql = 'DELETE FROM r_fleet_vehicle';
+        $sql = 'DELETE FROM fleet';
+        $pdo->exec($sql);
+    }
+
+    public function findByUserId(string $userId): ?Fleet
+    {
+        $pdo = PDOConnection::getPdo();
+        $sql = 'SELECT * FROM fleet WHERE user_id = :userId';
+        $statement = $pdo->prepare($sql);
+        $statement->bindValue(':userId', $userId);
+        $statement->execute();
+
+        $fleetData = $statement->fetch();
+
+        if (!$fleetData) {
+            return null;
+        }
+
+        $fleet = new Fleet($userId);
+        $fleet->setId(new FleetId($fleetData['id']));
+
+        $sql = 'SELECT * 
+                FROM vehicle AS V 
+                INNER JOIN r_fleet_vehicle AS R ON V.id = R.vehicle_id
+                WHERE R.fleet_id = :fleetId';
+
+        $statement = $pdo->prepare($sql);
+        $statement->bindValue(':fleetId', $fleetData['id']);
+        $statement->execute();
+
+        $vehiclesData = $statement->fetchAll();
+        foreach ($vehiclesData as $vehicleData) {
+            $vehicle = new Vehicle($vehicleData['plate_number']);
+            $vehicle->setId(new VehicleId($vehicleData['id']));
+            $vehicle->setLocation($vehicleData['lat'], $vehicleData['lng'], $vehicleData['alt']);
+
+            $fleet->registerVehicle($vehicle);
+        }
+
+        return $fleet;
     }
 }
