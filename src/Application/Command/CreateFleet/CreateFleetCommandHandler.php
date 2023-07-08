@@ -8,10 +8,17 @@ use Fulll\Domain\Interface\FleetRepositoryInterface;
 
 class CreateFleetCommandHandler
 {
+    /**
+     * @param FleetRepositoryInterface $fleetRepository
+     */
     public function __construct(private FleetRepositoryInterface $fleetRepository)
     {
     }
 
+    /**
+     * @param CreateFleetCommand $command
+     * @return FleetId
+     */
     public function __invoke(CreateFleetCommand $command): FleetId
     {
         $userId = $command->getUserId();

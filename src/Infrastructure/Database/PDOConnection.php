@@ -6,7 +6,10 @@ use PDO;
 
 class PDOConnection
 {
+    /** @var PDO  */
     private PDO $pdo;
+
+    /** @var $this|null  */
     private static ?self $instance = null;
 
     public function __construct()
@@ -17,6 +20,9 @@ class PDOConnection
         $this->pdo->exec('SET NAMES UTF8');
     }
 
+    /**
+     * @return PDO
+     */
     public static function getPdo(): PDO
     {
         if (null === self::$instance) {

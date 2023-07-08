@@ -10,6 +10,7 @@ use Fulll\Domain\Shared\ValueObject\UuidV4Generator;
 
 class InMemoryVehicleRepository implements VehicleRepositoryInterface
 {
+    /** @var array  */
     private static array $vehicleCollection;
 
     public function __construct()
@@ -17,6 +18,11 @@ class InMemoryVehicleRepository implements VehicleRepositoryInterface
         static::$vehicleCollection = [];
     }
 
+    /**
+     * @param Vehicle $vehicle
+     * @return VehicleId
+     * @throws \Exception
+     */
     public function persist(Vehicle $vehicle): VehicleId
     {
         $vehicle->setId(new VehicleId(UuidV4Generator::generate()));
@@ -26,6 +32,10 @@ class InMemoryVehicleRepository implements VehicleRepositoryInterface
         return $vehicle->getId();
     }
 
+    /**
+     * @param string|PlateNumber $plateNumber
+     * @return Vehicle|null
+     */
     public function findByPlateNumber(string|PlateNumber $plateNumber): ?Vehicle
     {
         if (is_string($plateNumber)) {
@@ -40,10 +50,17 @@ class InMemoryVehicleRepository implements VehicleRepositoryInterface
         return null;
     }
 
+    /**
+     * @param Vehicle $vehicle
+     * @return void
+     */
     public function updateLocalization(Vehicle $vehicle): void
     {
     }
 
+    /**
+     * @return void
+     */
     public function empty(): void
     {
         static::$vehicleCollection = [];

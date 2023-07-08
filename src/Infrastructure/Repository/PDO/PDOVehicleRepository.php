@@ -16,6 +16,11 @@ use Fulll\Domain\Interface\VehicleRepositoryInterface;
 
 class PDOVehicleRepository implements VehicleRepositoryInterface
 {
+    /**
+     * @param Vehicle $Vehicle
+     * @return VehicleId
+     * @throws \Exception
+     */
     public function persist(Vehicle $Vehicle): VehicleId
     {
         $uuidv4 = UuidV4Generator::generate();
@@ -31,6 +36,10 @@ class PDOVehicleRepository implements VehicleRepositoryInterface
         return $Vehicle->getId();
     }
 
+    /**
+     * @param string|PlateNumber $plateNumber
+     * @return Vehicle|null
+     */
     public function findByPlateNumber(string|PlateNumber $plateNumber): ?Vehicle
     {
         $plateNumberValue = ($plateNumber instanceof PlateNumber) ? $plateNumber->getValue() : $plateNumber;
@@ -54,6 +63,10 @@ class PDOVehicleRepository implements VehicleRepositoryInterface
         return $vehicle;
     }
 
+    /**
+     * @param Vehicle $vehicle
+     * @return void
+     */
     public function updateLocalization(Vehicle $vehicle): void
     {
         $pdo = PDOConnection::getPdo();
@@ -67,6 +80,9 @@ class PDOVehicleRepository implements VehicleRepositoryInterface
         $statement->execute();
     }
 
+    /**
+     * @return void
+     */
     public function empty(): void
     {
         $pdo = PDOConnection::getPdo();

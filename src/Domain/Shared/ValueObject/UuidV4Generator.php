@@ -6,6 +6,10 @@ namespace Fulll\Domain\Shared\ValueObject;
 
 class UuidV4Generator
 {
+    /**
+     * @return string
+     * @throws \Exception
+     */
     public static function generate(): string
     {
         $data = random_bytes(16);

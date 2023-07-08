@@ -2,6 +2,7 @@
 
 namespace Fulll\Infrastructure\Repository\PDO;
 
+use Fulll\Domain\Exception\VehicleAlreadyRegisteredInFleetException;
 use Fulll\Domain\Model\Fleet;
 use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\Vehicle;
@@ -12,6 +13,11 @@ use Fulll\Domain\Shared\ValueObject\UuidV4Generator;
 
 class PDOFleetRepository implements FleetRepositoryInterface
 {
+    /**
+     * @param Fleet $fleet
+     * @return FleetId
+     * @throws \Exception
+     */
     public function persist(Fleet $fleet): FleetId
     {
         $uuidv4 = UuidV4Generator::generate();
@@ -27,6 +33,10 @@ class PDOFleetRepository implements FleetRepositoryInterface
         return $fleet->getId();
     }
 
+    /**
+     * @param FleetId $id
+     * @return Fleet|null
+     */
     public function find(FleetId $id): ?Fleet
     {
         $pdo = PDOConnection::getPdo();
@@ -47,6 +57,11 @@ class PDOFleetRepository implements FleetRepositoryInterface
         return $fleet;
     }
 
+    /**
+     * @param Fleet $fleet
+     * @param Vehicle $vehicle
+     * @return void
+     */
     public function registerVehicle(Fleet $fleet, Vehicle $vehicle): void
     {
         $pdo = PDOConnection::getPdo();
@@ -57,6 +72,9 @@ class PDOFleetRepository implements FleetRepositoryInterface
         $statement->execute();
     }
 
+    /**
+     * @return void
+     */
     public function empty(): void
     {
         $pdo = PDOConnection::getPdo();
@@ -65,6 +83,11 @@ class PDOFleetRepository implements FleetRepositoryInterface
         $pdo->exec($sql);
     }
 
+    /**
+     * @param string $userId
+     * @return Fleet|null
+     * @throws VehicleAlreadyRegisteredInFleetException
+     */
     public function findByUserId(string $userId): ?Fleet
     {
         $pdo = PDOConnection::getPdo();

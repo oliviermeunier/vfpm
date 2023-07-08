@@ -17,6 +17,9 @@ use Fulll\Application\Command\RegisterVehicle\RegisterVehicleCommandHandler;
 
 class RegisterVehicleSymfonyCommand extends Command
 {
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('register-vehicle')
@@ -26,6 +29,11 @@ class RegisterVehicleSymfonyCommand extends Command
             ->addArgument('plate-number', InputArgument::REQUIRED, 'Vehicle plate number');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {

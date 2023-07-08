@@ -13,6 +13,9 @@ use Fulll\Infrastructure\Repository\InMemory\InMemoryFleetRepository;
 
 class CreateFleetSymfonyCommand extends Command
 {
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('create')
@@ -21,6 +24,11 @@ class CreateFleetSymfonyCommand extends Command
             ->addArgument('user-id', InputArgument::REQUIRED, 'User Id');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $userId = $input->getArgument('user-id');

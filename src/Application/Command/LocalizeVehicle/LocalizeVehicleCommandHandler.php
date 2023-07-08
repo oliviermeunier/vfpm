@@ -3,17 +3,25 @@
 namespace Fulll\Application\Command\LocalizeVehicle;
 
 use Exception;
+use Fulll\Domain\Exception\VehicleAlreadyParkedAtLocationException;
 use Fulll\Domain\Model\Location;
 use Fulll\Domain\Interface\VehicleRepositoryInterface;
-use Fulll\Application\Command\LocalizeVehicle\LocalizeVehicleCommand;
 
 class LocalizeVehicleCommandHandler
 {
+    /**
+     * @param VehicleRepositoryInterface $vehicleRepository
+     */
     public function __construct(
         private VehicleRepositoryInterface $vehicleRepository
     ) {
     }
 
+    /**
+     * @param LocalizeVehicleCommand $command
+     * @return void
+     * @throws VehicleAlreadyParkedAtLocationException
+     */
     public function __invoke(LocalizeVehicleCommand $command): void
     {
         // $fleetId = $command->getFleetId(); // What is it for ?

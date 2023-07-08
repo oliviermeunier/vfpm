@@ -11,12 +11,21 @@ use Fulll\Application\Command\RegisterVehicle\RegisterVehicleCommand;
 
 class RegisterVehicleCommandHandler
 {
+    /**
+     * @param FleetRepositoryInterface $fleetRepository
+     * @param VehicleRepositoryInterface $vehicleRepository
+     */
     public function __construct(
         private FleetRepositoryInterface $fleetRepository,
         private VehicleRepositoryInterface $vehicleRepository
     ) {
     }
 
+    /**
+     * @param \Fulll\Application\Command\RegisterVehicle\RegisterVehicleCommand $command
+     * @return void
+     * @throws \Fulll\Domain\Exception\VehicleAlreadyRegisteredInFleetException
+     */
     public function __invoke(RegisterVehicleCommand $command): void
     {
         $fleetId = new FleetId($command->getFleetId());
@@ -34,7 +43,6 @@ class RegisterVehicleCommandHandler
             $this->vehicleRepository->persist($vehicle);
         }
 
-        // @TODO is this the best way to do ?
         $fleet->registerVehicle($vehicle);
         $this->fleetRepository->registerVehicle($fleet, $vehicle);
     }

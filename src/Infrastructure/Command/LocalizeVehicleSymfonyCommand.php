@@ -13,6 +13,9 @@ use Fulll\Application\Command\LocalizeVehicle\LocalizeVehicleCommandHandler;
 
 class LocalizeVehicleSymfonyCommand extends Command
 {
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('localize-vehicle')
@@ -25,6 +28,11 @@ class LocalizeVehicleSymfonyCommand extends Command
             ->addArgument('alt', InputArgument::OPTIONAL, 'Altitude');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
@@ -42,7 +50,7 @@ class LocalizeVehicleSymfonyCommand extends Command
 
             $handler($command);
 
-            $output->writeln(sprintf('Vehicle successfully localized'));
+            $output->writeln('Vehicle successfully localized');
             return Command::SUCCESS;
         } catch (Exception $exception) {
             $output->writeln('<error>' . $exception->getMessage() . '</error>');
