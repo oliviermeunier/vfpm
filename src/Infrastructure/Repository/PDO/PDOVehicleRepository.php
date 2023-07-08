@@ -2,15 +2,16 @@
 
 namespace Fulll\Infrastructure\Repository\PDO;
 
+use PDO;
 use Fulll\Domain\Model\Fleet;
 use Fulll\Domain\Model\FleetId;
 use Fulll\Domain\Model\Vehicle;
 use Fulll\Domain\Model\VehicleId;
+use Fulll\Domain\Model\PlateNumber;
 use Fulll\Infrastructure\Database\PDOConnection;
 use Fulll\Domain\Interface\FleetRepositoryInterface;
-use Fulll\Domain\Interface\VehicleRepositoryInterface;
-use Fulll\Domain\Model\PlateNumber;
 use Fulll\Domain\Shared\ValueObject\UuidV4Generator;
+use Fulll\Domain\Interface\VehicleRepositoryInterface;
 
 class PDOVehicleRepository implements VehicleRepositoryInterface
 {
@@ -49,5 +50,18 @@ class PDOVehicleRepository implements VehicleRepositoryInterface
         $fleet->setId(new VehicleId($vehicleData['id']));
 
         return $fleet;
+    }
+
+    public function updateLocalization(Vehicle $vehicle): void
+    {
+        $pdo = PDOConnection::getPdo();
+        $sql = 'UPDATE vehicle SET lat = :lat, lng = :lng, alt = :alt WHERE id = :id';
+        $statement = $pdo->prepare($sql);
+        $statement->bindValue(':lat', $vehicle->getLocation()->getLatitude());
+        $statement->bindValue(':lng', $vehicle->getLocation()->getLongitude());
+        $statement->bindValue(':alt', $vehicle->getLocation()->getAltitude());
+        $statement->bindValue(':id', $vehicle->getId()->getValue());
+
+        $statement->execute();
     }
 }

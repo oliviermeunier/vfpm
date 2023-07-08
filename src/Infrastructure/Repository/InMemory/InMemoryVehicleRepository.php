@@ -39,4 +39,8 @@ class InMemoryVehicleRepository implements VehicleRepositoryInterface
         }
         return null;
     }
+
+    public function updateLocalization(Vehicle $vehicle): void
+    {
+    }
 }
