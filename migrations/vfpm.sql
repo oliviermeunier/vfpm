@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : jeu. 06 juil. 2023 à 19:16
+-- Généré le : sam. 08 juil. 2023 à 14:49
 -- Version du serveur : 5.7.33
 -- Version de PHP : 8.2.7
 
@@ -51,7 +51,10 @@ CREATE TABLE `r_fleet_vehicle` (
 
 CREATE TABLE `vehicle` (
   `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `plate_number` char(9) COLLATE utf8mb4_unicode_ci NOT NULL
+  `plate_number` char(9) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lat` float DEFAULT NULL,
+  `lng` float DEFAULT NULL,
+  `alt` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
